@@ -32,6 +32,15 @@ El sistema trata a todos los usuarios de la misma forma, independientemente de s
 *   **Ejemplo Hard:** Si el perfil es `HARD`, enviar recordatorios cada 15 minutos si la ropa se queda húmeda en la lavadora (fase `HANGING` evadida).
 *   **Ejemplo Soft:** Si el perfil es `SOFT`, enviar una única notificación amistosa al terminar el lavado y no volver a molestar en todo el día, respetando la baja energía del usuario.
 
+## 4. Priorización Automática del Backlog (`priorityScore`)
+**Estado Actual:**
+En la tabla `batches`, existe un campo `priorityScore` que se inicializa en `0` por defecto cuando el usuario anota una nueva intención de lavado. No hay interfaz para ver el backlog ordenado ni algoritmos que modifiquen este puntaje.
+**El Problema:**
+El usuario aún tiene que decidir qué lavar primero (Parálisis por Análisis / Disfunción Ejecutiva). Si hay 4 tandas en el backlog, decidir cuál es la más urgente consume fricción cognitiva que la app debería resolver.
+**El Tune-In Faltante:**
+*   **Motor de Priorización:** Desarrollar un algoritmo que eleve el `priorityScore` de forma dinámica. Por ejemplo, si un usuario indica que el cesto tiene ropa interior (prendas críticas), el puntaje sube a 100. Si las sábanas llevan 3 semanas sin lavarse, el puntaje escala.
+*   **UI del Backlog:** Crear una vista de lista (List View) para el Backlog donde Washy dicte exactamente *"Esta es la tanda #1 que debes agarrar"*, ordenando automáticamente los registros de mayor a menor `priorityScore`.
+
 ---
 **Objetivo de este documento:** 
 Asegurar que el equipo técnico (o el próximo agente IA) entienda que la lógica matemática actual es un *placeholder* funcional, pero el diseño final de producto exige estas integraciones para ser una herramienta verdaderamente empática y proactiva.
