@@ -41,6 +41,13 @@ El usuario aún tiene que decidir qué lavar primero (Parálisis por Análisis /
 *   **Motor de Priorización:** Desarrollar un algoritmo que eleve el `priorityScore` de forma dinámica. Por ejemplo, si un usuario indica que el cesto tiene ropa interior (prendas críticas), el puntaje sube a 100. Si las sábanas llevan 3 semanas sin lavarse, el puntaje escala.
 *   **UI del Backlog:** Crear una vista de lista (List View) para el Backlog donde Washy dicte exactamente *"Esta es la tanda #1 que debes agarrar"*, ordenando automáticamente los registros de mayor a menor `priorityScore`.
 
+## 5. Tablas de Fundación (El Puente a la Fase 4 y 5)
+Existen varias tablas en el esquema (`schema.ts`) que fueron creadas como cimientos arquitectónicos pero que actualmente están huérfanas (no tienen integración con la Interfaz de Usuario). Su propósito es el siguiente:
+
+*   **`activityLogs` (Motor de Proactividad):** Diseñada para rastrear el estilo de vida del usuario (ej. ir al gimnasio, fiestas). El tune-in futuro requiere una UI para que el usuario registre estas actividades. El motor cruzará estos datos para inferir automáticamente la suciedad de prendas específicas e incrementar el `priorityScore` de categorías afines (ej. mucha actividad física = alta prioridad a ropa *Tech*).
+*   **`notificationLogs` (Despachador Asíncrono):** Esta tabla funcionará como la cola de mensajes (Message Queue) del sistema. El motor de reconciliación no disparará alertas directas, sino que escribirá registros con status `PENDING` y un `scheduled_for`. Un Worker nativo consumirá esta tabla para enviar las Push Notifications reales. Esto es el corazón técnico del *Nagging Profile*.
+*   **`users` y `userSettings` (Autenticación y Ajustes):** Actualmente la app opera en un modelo "Single Player Local". Al integrar autenticación (ej. Supabase Auth), se activarán estas tablas para permitir configuraciones globales (agresividad del sistema, tolerancias de días para el "Auto-Done") y habilitará el soporte para múltiples personas en el mismo hogar sin cruzar estados de lavado.
+
 ---
 **Objetivo de este documento:** 
 Asegurar que el equipo técnico (o el próximo agente IA) entienda que la lógica matemática actual es un *placeholder* funcional, pero el diseño final de producto exige estas integraciones para ser una herramienta verdaderamente empática y proactiva.
