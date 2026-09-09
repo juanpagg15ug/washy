@@ -60,6 +60,16 @@ export default function BatchFlowScreen() {
   if (loading) return <View style={styles.center}><ActivityIndicator size="large" color="#10b981" /></View>;
   if (!batch) return <View style={styles.center}><Text style={styles.title}>Error: Tanda no encontrada</Text></View>;
 
+  const shortId = id.split('-')[0].toUpperCase();
+
+  // Header compartido para los pasos
+  const StepHeader = () => (
+    <View style={styles.stepHeader}>
+      <Text style={styles.stepHeaderText}>TANDA #{shortId}</Text>
+      <Text style={styles.stepHeaderSub}>Progreso Físico</Text>
+    </View>
+  );
+
   // ==========================================
   // PANTALLAS DE LA MÁQUINA DE ESTADOS (FSM)
   // ==========================================
@@ -67,6 +77,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'TIME_CHECK') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>¿Cuánta energía tienes hoy?</Text>
         <Text style={styles.subtitle}>Sé honesto, no hay respuestas incorrectas.</Text>
         <View style={styles.buttonGroup}>
@@ -82,6 +93,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'ANCHOR') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>Ponte tus audífonos</Text>
         <Text style={styles.subtitle}>Pon música o un podcast. Avísame cuando estés listo.</Text>
         <View style={styles.buttonGroup}>
@@ -95,6 +107,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'CLASSIFICATION') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>Clasificación</Text>
         <Text style={styles.subtitle}>¿Qué vas a meter a la lavadora?</Text>
         <View style={styles.buttonGroup}>
@@ -119,6 +132,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'WASHING') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>Lavadora en marcha 🌀</Text>
         <Text style={styles.subtitle}>Zona Ciega: el motor está trabajando. Te avisaré cuando termine.</Text>
         <View style={styles.buttonGroup}>
@@ -136,6 +150,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'HANGING') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>¡Lavado finalizado! 🧺</Text>
         <Text style={styles.subtitle}>La ropa está húmeda dentro del tambor. Sacudida técnica y a colgar para evitar olor a humedad.</Text>
         <View style={styles.buttonGroup}>
@@ -162,6 +177,7 @@ export default function BatchFlowScreen() {
   if (flowStep === 'DRYING') {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>Secándose al Sol ☀️</Text>
         <Text style={styles.subtitle}>La ropa ya está colgada. El tendedero está ocupado, pero la lavadora está libre.</Text>
         <View style={styles.buttonGroup}>
@@ -186,6 +202,7 @@ export default function BatchFlowScreen() {
     if (!closureGoal) {
       return (
         <View style={styles.container}>
+        <StepHeader />
           <Text style={styles.title}>Ropa en el cuarto ✨</Text>
           <Text style={styles.subtitle}>El tendedero ya está libre. Elige tu meta honesta para doblar hoy:</Text>
 
@@ -228,6 +245,7 @@ export default function BatchFlowScreen() {
 
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>{goalTitle}</Text>
         <Text style={styles.subtitle}>🎧 Ponte audífonos con música o un podcast para vencer el tedio del movimiento repetitivo.</Text>
         
@@ -259,6 +277,7 @@ export default function BatchFlowScreen() {
   if (flowStep === ('DONE' as any)) {
     return (
       <View style={styles.container}>
+        <StepHeader />
         <Text style={styles.title}>¡Ritual Completado! 🎉</Text>
         <Text style={styles.subtitle}>Un paso más hacia el orden sin culpa. Disfruta tu ropa limpia.</Text>
         <View style={styles.buttonGroup}>
@@ -275,7 +294,22 @@ export default function BatchFlowScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#171717', padding: 24, justifyContent: 'center' },
   center: { flex: 1, backgroundColor: '#171717', justifyContent: 'center', alignItems: 'center' },
-  title: { color: '#ffffff', fontSize: 32, fontWeight: 'bold', marginBottom: 12, textAlign: 'center' },
+  
+  stepHeader: {
+    position: 'absolute',
+    top: 40,
+    left: 24,
+    right: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#262626',
+    paddingBottom: 16,
+  },
+  stepHeaderText: { color: '#737373', fontSize: 14, fontWeight: 'bold' },
+  stepHeaderSub: { color: '#10b981', fontSize: 14, fontWeight: 'bold' },
+
+  title: { color: '#ffffff', fontSize: 32, fontWeight: 'bold', marginBottom: 12, textAlign: 'center', marginTop: 40 },
   subtitle: { color: '#a3a3a3', fontSize: 18, marginBottom: 48, textAlign: 'center' },
   buttonGroup: { gap: 16 },
   abortBtn: { marginTop: 32 }
