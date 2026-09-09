@@ -1,0 +1,141 @@
+// Esquema de Base de Datos Washy (Local-First)
+// Pegar en dbdiagram.io para visualizar
+
+// ==========================================
+// ENUMS
+// ==========================================
+Enum batch_status {
+  BACKLOG
+  SOAKING
+  WASHING
+  DRYING
+  READY_TO_FOLD
+  DONE
+}
+Enum event_type {
+  STATE_CHANGE
+  HANDOFF
+  WEATHER_DELAY
+  ABORT
+  SYSTEM_AUTO_DONE
+}
+Enum water_temp {
+  COLD
+  WARM // Patric Richardson Default
+  HOT
+}
+Enum cycle_type {
+  EXPRESS // Patric Richardson Default
+  DELICATE
+  NORMAL
+  HEAVY
+}
+Enum nagging_profile {
+  SOFT
+  MEDIUM
+  HARD
+}
+Enum notification_status {
+  PENDING
+  DELIVERED
+  DISMISSED
+  ERROR
+}
+Enum notification_type {
+  REMINDER
+  NAGGING
+  CRITICAL
+}
+
+// ==========================================
+// DOMINIO DE MULTIUSUARIO & CONFIGURACIÓN
+// ==========================================
+Table users {
+  id uuid [pk]
+  name varchar
+  household_id uuid [null, note: 'Para agrupar roomies/parejas en v2']
+  created_at timestamp
+}
+Table user_settings {
+  user_id uuid [pk, ref: - users.id]
+  default_washer_mins int [default: 30, note: 'Default Express Richardson']
+  auto_done_days_threshold int [default: 3, note: 'Tolerancia Silla-Clóset']
+  nagging_profile nagging_profile [default: 'MEDIUM']
+}
+
+// ==========================================
+// DOMINIO DE INVENTARIO (El Diccionario)
+// ==========================================
+Table wash_rules {
+  id uuid [pk]
+  name varchar
+  water_temp water_temp [default: 'WARM']
+  cycle_type cycle_type [default: 'EXPRESS']
+  base_duration_mins int [default: 30]
+}
+Table categories {
+  id uuid [pk]
+  name varchar [note: 'Tech, Soft, Armor']
+  color_hex varchar
+  default_wash_rule_id uuid [null, ref: > wash_rules.id]
+}
+Table garments {
+  id uuid [pk]
+  category_id uuid [null, ref: > categories.id]
+  photo_uri varchar
+  has_print boolean [default: false, note: 'Trigger UX: Voltear al revés']
+  is_delicate_blend boolean [default: false, note: 'Regla del Eslabón Débil']
+  custom_wash_rule_id uuid [null, ref: > wash_rules.id, note: 'Si sobreescribe su categoría']
+  metadata jsonb [null, note: 'Whering ID, etc.']
+}
+
+// ==========================================
+// DOMINIO DE FLUJO (Kanban / WIP)
+// ==========================================
+Table batches {
+  id uuid [pk]
+  status batch_status [default: 'BACKLOG']
+  priority_score int [default: 0]
+  owner_id uuid [null, ref: > users.id, note: 'De quién es la ropa']
+  handler_id uuid [null, ref: > users.id, note: 'Quién tiene la responsabilidad actual (Handoff)']
+  created_at timestamp
+  metadata jsonb [null]
+}
+Table batch_categories {
+  batch_id uuid [ref: > batches.id]
+  category_id uuid [ref: > categories.id]
+  
+  indexes {
+    (batch_id, category_id) [pk] // Llave primaria compuesta
+  }
+  note: 'Tabla transitiva para la Tanda Frankenstein'
+}
+Table batch_events {
+  id uuid [pk]
+  batch_id uuid [ref: > batches.id]
+  event_type event_type
+  from_status batch_status [null]
+  to_status batch_status [null]
+  actor_id uuid [null, ref: > users.id, note: 'Quién o qué (Sistema) hizo el cambio']
+  metadata jsonb [null, note: 'Ej. { added_time_mins: 720 } por lluvia']
+  created_at timestamp
+}
+
+// ==========================================
+// DOMINIO DE CONTEXTO & MOTOR EJECUCIÓN
+// ==========================================
+Table activity_logs {
+  id uuid [pk]
+  user_id uuid [null, ref: > users.id]
+  activity_name varchar [note: 'Gym, Fiesta, etc.']
+  weight int [note: 'Suma prioridad al backlog']
+  logged_at timestamp
+}
+Table notification_logs {
+  id uuid [pk]
+  batch_id uuid [ref: > batches.id]
+  type notification_type
+  scheduled_for timestamp
+  delivered_at timestamp [null]
+  status notification_status [default: 'PENDING']
+}

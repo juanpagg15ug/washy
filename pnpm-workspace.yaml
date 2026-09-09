@@ -1,0 +1,14 @@
+packages:
+  - 'packages/*'
+allowBuilds:
+  esbuild: set this to true or false
+minimumReleaseAgeExclude:
+  - autoprefixer@10.5.5
+  - browserslist@4.28.9
+  - lucide-react@1.41.0
+  - '@expo/cli@57.0.22'
+  - '@expo/ui@57.0.16'
+  - expo-modules-core@57.0.16
+  - expo-modules-jsi@57.0.8
+  - expo-router@57.0.19
+  - expo@57.0.20

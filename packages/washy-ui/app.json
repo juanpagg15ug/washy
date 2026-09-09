@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "washy-ui",
+    "slug": "washy-ui",
+    "scheme": "washy",
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-sqlite",
+        {
+          "enableCrossOriginIsolation": true
+        }
+      ]
+    ]
+  }
+}

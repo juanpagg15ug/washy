@@ -1,0 +1,14 @@
+{
+  "name": "washy-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Washy - Local-First ADHD Laundry Ritual OS",
+  "scripts": {
+    "dev": "pnpm --filter \"./packages/**\" run dev",
+    "build": "pnpm --filter \"./packages/**\" run build",
+    "test": "pnpm --filter \"./packages/**\" run test"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  washy-dev:
+    image: mcr.microsoft.com/devcontainers/typescript-node:20
+    volumes:
+      - ..:/workspaces/Washy:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    ports:
+      - "5173:5173"

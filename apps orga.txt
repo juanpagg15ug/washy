@@ -1,0 +1,511 @@
+Conversación con Gemini
+Hay aplicaciones de laundry, hábitos de organización open source
+
+Existen excelentes herramientas de código abierto enfocadas en hábitos, organización de tareas del hogar y gestión del día a día, aunque casi no existen proyectos open source dedicados con exclusividad matemática a lavar ropa.
+
+La solución habitual en la comunidad open source es utilizar gestores de tareas domésticas recurrentes o trackers de hábitos altamente configurables:
+
+Organización de tareas del hogar y mantenimiento
+
+Grocy: El ERP definitivo para el hogar, self-hosted y de código abierto. Maneja inventario de despensa, compras, pero destaca en su módulo de tareas domésticas (chores): permite fijar frecuencias flexibles (ej. "lavar sábanas cada 14 días" o "lavar ropa oscura al llegar a X carga"), asignar responsables y llevar registro histórico.
+
+Vikunja: Un gestor de tareas (to-do) potente, visual (tableros Kanban, listas, diagramas de Gantt) y con soporte completo para recurrencias complejas (ej. "repetir 3 días después de completada la última vez"), ideal para rutinas cíclicas de limpieza y lavandería.
+
+Hábitos y rutinas recurrentes (Móvil / Android)
+
+Loop Habit Tracker: Disponible en F-Droid y GitHub. Es minimalista, sin anuncios, totalmente offline y centrado en la consistencia. Permite crear hábitos con repeticiones personalizadas (por ejemplo: 2 veces por semana, cada domingo, etc.) y ofrece gráficos limpios de rachas y frecuencia.
+
+Habitica: Combina el seguimiento de hábitos y listas de tareas con un formato RPG / gamificación. Su base de código es abierta y permite configurar rutinas diarias o semanales (como días de colada) donde ganas experiencia o pierdes puntos de vida si las descuidas.
+
+Table Habit / Everyday Habit Tracker forks: Clones y proyectos libres en GitHub pensados para llevar un registro visual en cuadrícula de tareas de autocuidado y orden doméstico.
+
+Organización de guardarropa e inventario (Wardrobe management)
+
+Si buscas controlar qué prendas tienes, cómo combinarlas o llevar la cuenta de cuántas puestas tiene una prenda antes de necesitar lavado, proyectos de gestión de activos o armarios virtuales abiertos como WannaWear o catálogos locales en Obsidian (usando plugins como Dataview) se adaptan muy bien a este flujo.
+
+¿Buscas una aplicación móvil directa (estilo APK/F-Droid) para marcar hábitos, o prefieres una plataforma self-hosted en servidor local para gestionar toda la casa?
+
+Quiero que pueda ser configurable o editable personabizalbe con código pero que mantenga lo más posible de esas apps es más que todo adaptarlo a mi mente TDAH, y a mis inspiraciones de como quisiera comportarme
+
+Para una mente con TDAH, el software rígido suele fracasar porque impone una fricción cognitiva que paraliza o cansa rápido. Necesitas visibilidad inmediata, baja fricción de entrada, dopamina rápida y código modificable para ajustar las reglas según cambie tu hiperfoco o tu rutina.
+
+Las mejores alternativas de código abierto que puedes intervenir directamente para adaptarlas a tu lógica interna son:
+
+1. Habitica (Fork propio / API + Scripts)
+
+Base técnica: Node.js, Express, Vue.js y MongoDB (todo en GitHub).
+
+Por qué funciona con TDAH: Transforma tareas aburridas (lavar ropa, tender, doblar) en batallas contra monstruos, experiencia y recompensas inmediatas.
+
+Nivel de personalización: No necesitas montar todo el servidor si no quieres; su API REST pública te permite escribir scripts propios (Python, Node o Cloud Functions) para automatizar reglas: por ejemplo, si dejas la ropa en la lavadora más de 4 horas, un script puede restarte vida o activar un recordatorio más agresivo.
+
+2. Grocy (Webhooks + Custom CSS / Modding)
+
+Base técnica: PHP y SQLite/MySQL, con una API REST exhaustiva y webhooks.
+
+Por qué funciona con TDAH: Elimina la carga mental de recordar cuándo fue la última vez que lavaste sábanas o toallas mediante la lógica de "intervalos dinámicos" (la tarea se agenda X días después de que realmente la hiciste, no en un día fijo que te genere culpa si lo pospones).
+
+Nivel de personalización: Altamente moldeable. Puedes crear una interfaz mínima tipo PWA que solo consulte la API de Grocy y muestre únicamente la "próxima acción inmediata" para no abrumarte con pantallas densas.
+
+3. Obsidian + Dataview + Tracker (Entorno local en Markdown)
+
+Base técnica: JavaScript/TypeScript (mediante Obsidian API y plugins de la comunidad).
+
+Por qué funciona con TDAH: Flexibilidad total sin estructura impuesta. Tus hábitos y el estado de la ropa viven en notas de texto plano.
+
+Nivel de personalización:
+
+DataviewJS: Puedes escribir código JS dentro de tus notas para renderizar paneles dinámicos: botones de un clic para registrar "puse la lavadora", barras de progreso visuales de uso de ropa, o vistas estilo Kanban que solo muestran lo relevante de hoy.
+
+No hay pantallas predeterminadas que te distraigan; diseñas exactamente el dashboard visual que tu cabeza necesita ver hoy.
+
+4. Crear una PWA mínima a medida (Tailwind + Firebase / PocketBase)
+
+Base técnica: Vite + React/Svelte/Vue con un backend ligero como PocketBase o Firebase.
+
+Por qué funciona con TDAH: La mayoría de apps fallan porque tienen 5 clics de más. Si programas tu propia micro-app centrada en un modelo de estados de lavandería (ej. Cesto lleno -> Lavando -> Tendida -> Por doblar -> Guardada), el flujo responde exactamente a tu secuencia mental sin ruido externo.
+
+¿Te inclinas más por construir una interfaz propia muy ligera consumiendo una API/backend existente, o prefieres bifurcar y meter mano directamente al frontend de un proyecto como Habitica o Grocy?
+
+Que sabes del copilot parric que genere acá
+
+No tengo registrado un proyecto, prompt o configuración guardado bajo el nombre exacto de "copilot parric" en nuestro historial.
+
+Es muy probable que haya ocurrido un error tipográfico al escribirlo (por autocorrector) o que te refieras a alguna de estas dos cosas que hemos trabajado:
+
+Un asistente / prompt de sistema personalizado: Un Copilot o Custom GPT que configuramos para actuar como copiloto en un área específica (por ejemplo, estructuración curricular, diseño instruccional, o reglas de negocio/lógica para tus proyectos de código).
+
+Un typo de otra palabra clave: Por el parecido fonético/teclado, podría tratarse de algún copiloto o automatización vinculada a un proyecto específico (por ejemplo, algo relacionado con POCUS, pénsum, prácticas, o alguna herramienta CLI/desarrollo).
+
+¿Recuerdas cuál era la función principal de ese copilot o qué problema resolvía cuando lo armamos? Con ese detalle lo ubico de inmediato.
+
+Patric es un gem
+
+Entendido, es un Gem personalizado (un asistente customizado dentro de Gemini).
+
+Como los detalles de la configuración interna o el system prompt de tus Gems privados no quedan indexados en este chat principal a menos que los compartas aquí, no tengo visibles sus instrucciones exactas.
+
+¿Cuáles eran las instrucciones, el rol o el estilo de acompañamiento que le diste a Patric para que lo integremos a lo que estás armando ahora?
+
+Actúa como un Coach de Funciones Ejecutivas especializado en Gestión Operativa del Hogar y Cuidado Textil. Tu enfoque se basa en el libro Laundry Love (Patric Richardson): la lavandería no es una tarea pesada, sino un acto de amor propio y cuidado de los activos personales (la ropa). La misión es eliminar la parálisis por análisis, simplificar la toma de decisiones y acompañar al usuario hasta lograr un closet en "Nivel Top".
+
+​Fases de Operación:
+
+​Fase 0: Sincronización y Tiempo (Time-Check)
+
+​Pregunta obligatoria inicial: "¿Qué hora es y cuánta energía tienes (1-10)?".
+
+​Noche (>7 PM): Advertir sobre la falta de sol. Recomendar remojo nocturno solo para algodones/toallas similares, máximo 2 cucharadas de jabón, y sugerir alarma matutina. Advertir no hacerlo con camisas formales o de consultoría.
+
+​Tarde (1–4 PM): Advertir sobre el riesgo de humedad nocturna si las prendas no alcanzan a secar a tiempo.
+
+​Mañana: Luz verde para iniciar el ritual completo.
+
+​Fase 1: Activación de Hiperfoco (El Ritual)
+
+​Audio: Preguntar: "¿Tienes tus audífonos o la bocina lista? ¿Qué vas a escuchar para entrar en la zona?". No avanzar hasta confirmar el anclaje auditivo.
+
+​Hidratación: Sugerir tener a mano agua o café.
+
+​Meta-comunicación: Recordar desconectar del trabajo intelectual/consultoría ("solo somos tú, la música y las fibras").
+
+​Fase 2: Clasificación por Uso y Fibra (Sin Estrés de Colores)
+
+​Reducir la separación a 3 unidades lógicas:
+
+​Soft & Personal (Algodones/Linos): Camisetas, ropa interior, ropa de casa (agua fría, 2 cdas. de detergente).
+
+​Performance & Tech (Sintéticos/Deporte): Ropa elástica/técnica (advertencia: cero suavizante para proteger la transpirabilidad).
+
+​Armor & Home (Pesados): Jeans, toallas, sábanas.
+
+​Fase 3: Tratamiento "Nivel Top" (Patric Richardson Style)
+
+​Triaje de Manchas: Identificar manchas de comida, sudor o café antes de lavar y tratarlas localmente (jabón de barra o vinagre).
+
+​Regla de Oro: Solo 2 cucharadas de detergente; el exceso satura la fibra y ensucia.
+
+​Fase 4: Gestión del Sol y el Viento
+
+​Protección: Colgar prendas del revés para cuidar el color frente a los rayos UV.
+
+​Punto de Humedad Cero: Retirar la ropa en cuanto seque ("si se tuesta, la fibra sufre").
+
+​Sacudida Técnica: 2 sacudidas enérgicas al descolgar para eliminar polvo y relajar las fibras.
+
+​Fase 5: El Cierre (Doblado Vertical y Closet)
+
+​Despejar superficies por completo antes de dar por cerrada la sesión.
+
+​Doblado Vertical: Guiar el doblado tipo archivo (las prendas deben sostenerse en pie).
+
+​Organización: Separar en el closet por contexto de uso (Trabajo/Consultoría vs. Casa/Deporte).
+
+​Inspección final: Apartar prendas con roturas o botones faltantes; no entran al closet hasta repararse.
+
+​Reglas de Interacción:
+
+​Entregar una sola instrucción clara a la vez para no sobrecargar cognitivamente.
+
+​Cerrar cada intervención con: "¿Listo para el siguiente paso?" o "¿Cómo va ese hiperfoco?".
+
+Vamos a cuidar de tus prendas y a despejar la mente paso a paso, sin prisa ni sobrecarga.
+
+¿Qué hora es y cuánta energía tienes del 1 al 10?
+
+Te di el promt algo así necesito en la app
+
+Para traducir la lógica de Patric (Laundry Love) a una aplicación open source y personalizable con código que funcione para una mente con TDAH, la clave es eliminar la vista de lista/calendario tradicional y convertirla en un motor de estados lineales paso a paso (un asistente estilo wizard o máquina de estados finitos).
+
+1. El modelo de arquitectura ideal
+En lugar de crear tareas estáticas que se acumulan y causan culpa, la app debe funcionar como una Máquina de Estados:
+
+[ Estado 0: Time-Check ] 
+       ↓ (Evalúa hora + energía)
+[ Estado 1: Anclaje ] (Check de audio + hidratación)
+       ↓
+[ Estado 2: Clasificación ] (Solo 3 botones grandes: Soft, Tech, Armor)
+       ↓
+[ Estado 3: Lavado ] (Temporizador visual + recordatorio de 2 cdas)
+       ↓
+[ Estado 4: Sol / Secado ] (Regla de humedad cero + sacudida)
+       ↓
+[ Estado 5: Cierre ] (Doblado vertical + despeje de superficie)
+Principios TDAH aplicados al código:
+
+Una sola pantalla a la vez: Nunca mostrar el paso de doblar mientras estás en el paso de clasificación.
+
+Cero parálisis por análisis: La clasificación no te pide separar 6 colores; solo ofrece 3 tarjetas visuales (Soft & Personal, Performance & Tech, Armor & Home).
+
+Alertas condicionales automáticas: Si hora >= 19:00, la app bloquea automáticamente el lavado completo y solo ofrece la rama de Remojo Nocturno.
+
+2. Dos opciones open source para implementarlo
+Opción A: PWA Ultraligera a Medida (Recomendada)
+Crear una Progressive Web App (PWA) mínima (instalable en tu móvil con un clic) usando Vite + React o Svelte + Tailwind CSS y backend en Firebase o almacenamiento local (localStorage).
+
+Por qué es la mejor opción: Es 100% tuya, sin pantallas sobrantes, sin menús confusos y puedes hardcodear exactamente los textos de Patric.
+
+Componentes clave:
+
+Un componente ActiveSession que solo renderiza el paso actual.
+
+Un botón de avance grande tipo "Listo para el siguiente paso".
+
+Integración con la Web Audio API o temporizadores del navegador para las alertas de fin de ciclo.
+
+Opción B: Front-end personalizado sobre Grocy o Vikunja
+Si quieres mantener inventario o historial general:
+
+Utilizas el backend de Grocy únicamente como base de datos (mediante su API REST).
+
+Creas una interfaz web simple (o un script en Node.js/Python) que lea las tareas de lavandería de Grocy pero te las presente con la secuencia de Patric paso a paso, sin que tengas que ver la interfaz densa de Grocy.
+
+3. Estructura base del código (Ejemplo del motor de estados)
+Un esquema en JavaScript/TypeScript de cómo se estructuran las fases para que la interfaz siempre se mantenga limpia:
+
+JavaScript
+// Definición de fases y lógica condicional
+const laundryFlow = [
+  {
+    step: 0,
+    title: "Sincronización y Tiempo",
+    getPrompt: (currentHour) => {
+      if (currentHour >= 19) {
+        return "Es de noche: solo recomendamos remojo nocturno para algodones/toallas. Nada de camisas formales.";
+      } else if (currentHour >= 13 && currentHour <= 16) {
+        return "Riesgo de humedad nocturna: verifica si las prendas alcanzarán a secar antes de que caiga el sol.";
+      }
+      return "Luz verde: condiciones óptimas para el ritual completo.";
+    },
+    inputs: ["energy_level"], // Slider del 1 al 10
+  },
+  {
+    step: 1,
+    title: "Activación de Hiperfoco",
+    instruction: "Ponte los audífonos o enciende la bocina. Desconecta de la consultoría: solo somos tú, la música y las fibras.",
+    requiredCheck: "audio_ready",
+  },
+  {
+    step: 2,
+    title: "Clasificación sin Estrés",
+    categories: [
+      { name: "Soft & Personal", rule: "Algodón/Lino - Agua fría - 2 cdas. jabón" },
+      { name: "Performance & Tech", rule: "Sintéticos/Deporte - CERO suavizante" },
+      { name: "Armor & Home", rule: "Jeans, toallas, sábanas - Carga pesada" }
+    ]
+  },
+  {
+    step: 3,
+    title: "Tratamiento y Lavado",
+    instruction: "Regla de oro: Máximo 2 cucharadas de jabón. Trata manchas visibles con jabón en barra antes de ingresar.",
+    timerMinutes: 45
+  },
+  {
+    step: 4,
+    title: "Gestión del Sol",
+    instruction: "Cuelga del revés para proteger el color del sol. Retira en cuanto esté seca: 2 sacudidas enérgicas al descolgar.",
+  },
+  {
+    step: 5,
+    title: "El Cierre",
+    instruction: "Doblado vertical estilo archivo. Separa por contexto (Consultoría vs. Casa/Gym). Despeja superficies por completo.",
+  }
+];
+¿Prefieres que desarrollemos el esqueleto de esta PWA minimalista (HTML/JS/Tailwind listo para correr en local o Firebase) o te interesa adaptarlo dentro de un entorno de notas como Obsidian con botones interactivos?
+
+Hay apps así o no?
+
+No existe una aplicación open source que reúna de forma nativa el cuidado textil de Patric + la lógica paso a paso (wizard) + filtros condicionales por hora y energía.
+
+El panorama real se divide en dos extremos:
+
+Tipo de App	Ejemplos	Qué resuelven bien	Por qué fallan con tu prompt
+Comerciales ADHD / Rutinas guiadas (Código cerrado)	RoutineFlow, Tiimo, Brili	Guiado paso a paso con temporizador grande, una sola acción a la vez y cero pantallas densas.	Son propietarias, de suscripción mensual y no admiten lógica condicional avanzada (no puedes programar: "si es más tarde de las 7 PM, bloquea el lavado y sugiere solo remojo nocturno").
+Open Source / Self-Hosted de tareas	Grocy, Vikunja, Habitica	Código abierto, editables, con API REST y personalizables con scripts.	Su interfaz nativa es de listas, calendarios o inventarios; no funcionan como un "asistente interactivo paso a paso" y provocan parálisis por análisis.
+Bots / Scripts Open Source ADHD en GitHub	Repositorios como adhd-planner-ai (Node.js/Telegram)	Flujos interactivos por chat, chequeo de energía (1–5) y división de tareas grandes en pasos pequeños.	No tienen una interfaz gráfica web/móvil nativa dedicada a lavandería; funcionan como bots de mensajería.
+Las dos vías reales para tenerlo
+1. La vía rápida: Adaptar una app existente (RoutineFlow o Tiimo)
+
+Creas una rutina llamada "Ritual Patric Richardson".
+
+Configuras cada paso con su duración (Audio/Hidratación: 3 min, Clasificación: 5 min, etc.).
+
+Limitación: Tienes que respetar tú mismo las reglas de horario y energía mentalmente, porque la app no ejecuta lógica condicional.
+
+2. La vía definitiva: Montar tu propia PWA ultraligera (1 solo archivo)
+Dado que buscas código personalizable y adaptado a tu lógica interna, la solución técnica más limpia no es intentar modificar un monstruo como Grocy, sino armar una Progressive Web App (PWA) de una sola pantalla:
+
+Frontend: Un archivo HTML + Tailwind (CDN) + Vanilla JS o React/Svelte.
+
+Control: Una máquina de estados finitos que lee la hora local del dispositivo, te pide el nivel de energía y va mostrando una sola tarjeta a la vez con el copy exacto de Patric.
+
+Persistencia: Guarda el estado en localStorage (o Firebase) por si cambias de app en el teléfono mientras se lava la ropa.
+
+¿Te sirve que preparemos el código base completo de esa interfaz para que la pruebes directamente en el navegador de tu teléfono?
+
+Que es Tody app
+
+Tody es una de las aplicaciones de limpieza y gestión del hogar más populares, especialmente conocida en comunidades con TDAH porque rompe por completo el formato tradicional de las listas de tareas pendientes (to-do lists).
+
+En lugar de fechas límite fijas o alarmas que generan culpa cuando se acumulan, Tody organiza la casa a través de zonas e indicadores visuales de suciedad/mantenimiento.
+
+¿Cómo funciona?
+Organización por áreas: Divides tu casa por espacios (ej. Cocina, Baño, Clóset, Lavandería).
+
+Tareas con intervalos relativos: Defines tareas con frecuencias flexibles (ej. Lavar sábanas cada 14 días, Limpiar filtro de lavadora cada 30 días).
+
+Barras de estado visuales: Cada tarea tiene una barra de color que se va degradando de verde (limpio/reciente) a naranja y rojo (necesita atención). Ves el nivel de urgencia de un vistazo sin leer calendarios.
+
+"Dusty" (Gamificación leve): En la versión de pago o planes avanzados, puedes competir contra un personaje animado que personifica la suciedad/desorden.
+
+Lo bueno y lo limitante frente a tu prompt de Patric
+Por qué gusta mucho con TDAH:
+
+Sin culpa por atraso: Si tocaba lavar sábanas el sábado y lo haces el martes, el contador de 14 días simplemente se reinicia a partir del martes. No arrastras notificaciones de "tarea vencida".
+
+Priorización visual: Te dice exactamente qué zona o tarea está en rojo para no tener que decidir por dónde empezar.
+
+Por qué se queda corta para tu caso:
+
+Es de código cerrado y de pago: No puedes modificar su código, ni conectarte a una API abierta, ni cambiar su lógica interna.
+
+No tiene guiado paso a paso (wizard): Te muestra qué toca hacer, pero no te lleva de la mano a través de las fases (Time-check, música, separación de 3 fibras, sacudida, doblado).
+
+Cero lógica condicional: No sabe qué hora es ni cuánta energía tienes para decirte: "son las 8 PM, solo haz remojo nocturno".
+
+Es una excelente herramienta para saber cuándo le toca atención a cada rincón de la casa, pero no actúa como un coach interactivo de ejecución paso a paso.
+
+Hay apps así open source que yo podría adaptar en una pwa?
+
+Sí, existen proyectos open source en GitHub con esa misma filosofía de intervalos flexibles y gestión de tareas del hogar que puedes tomar como base o conectar con una PWA:
+
+1. Donetick (donetick/donetick)
+Stack: React en el frontend, Go en el backend, Docker y REST API completa.
+
+Por qué encaja con TDAH: Está pensado específicamente para tareas del hogar (chores), subtareas con reinicio automático y seguimiento por recurrencia flexible.
+
+Cómo adaptarlo a PWA: Tiene una API REST lista para usar. Puedes usar Donetick como tu backend autoalojado y montar tu propio frontend PWA en React/Svelte que consuma esa API para mostrar solo la tarjeta activa de Patric.
+
+2. Grocy (Módulo de Chores)
+Stack: PHP / SQLite con API REST exhaustiva y webhooks.
+
+El equivalente open source más directo a Tody: Permite programar tareas con la lógica exacta de Tody: "hacer cada X días después de completada la última vez", sin generar fechas de vencimiento rígidas ni culpa.
+
+Cómo adaptarlo: La interfaz web de Grocy es densa, pero al tener API pública, tu PWA puede simplemente hacer POST /api/chores/{id}/execute al terminar el ritual de doblado.
+
+La paradoja para una mente con TDAH: Adaptar vs. Crear
+Hacer un fork de Donetick o Grocy para rediseñarles la interfaz implica lidiar con configuraciones de backend, dependencias de Docker y bases de datos relacionales completas.
+
+Para tu caso específico (donde necesitas cero fricción cognitiva, lógica horaria y acompañamiento paso a paso), suele ser mucho más efectivo montar una PWA "Local-First" (React o Svelte + Tailwind + localStorage):
+
+Estructura tipo Tody: Un tablero visual de tarjetas por frecuencia (Ropa blanca, Ropa de deporte, Sábanas).
+
+Disparador Patric: Al tocar una tarjeta que está "en amarillo o rojo", no te pide marcarla como hecha; en su lugar, despliega el modo ritual Patric (Time-check, música, separación de 3 fibras, sacudida, doblado).
+
+Persistencia sin servidores: Guarda el timestamp de la última lavada en el propio navegador de tu teléfono.
+
+¿Quieres que te prepare el código base de un prototipo interactivo (HTML/Tailwind/JS en un solo archivo) que combine las barras de estado visuales de Tody con el ritual guiado de Patric para que lo pruebes en el navegador?
+
+Antes de eso hazme probin questions de mi problema y como lo planeo resolver
+
+Para que la herramienta no termine convirtiéndose en otro proyecto abandonado tras el primer subidón de dopamina, vale la pena diseccionar los puntos ciegos antes de tocar una sola línea de código.
+
+Aquí tienes las preguntas clave, divididas por capas críticas:
+
+1. Sobre el punto de fricción real (Fisiología de la tarea)
+
+¿En qué fase exacta del proceso de lavandería se rompe históricamente tu continuidad? (¿Iniciar la carga? ¿Sacarla de la lavadora a tiempo para que no agarre olor a humedad? ¿O la montaña de ropa limpia sobre una silla que pasa días sin doblarse?)
+
+Cuando estás en un nivel de energía bajo (3 o 4 sobre 10), ¿qué te genera más resistencia: la toma de decisiones (saber qué lavar y cómo) o la demanda física (moverse, cargar, colgar)?
+
+2. Sobre la interacción y la sobrecarga cognitiva (UX para TDAH)
+
+Si la app te hace preguntas paso a paso ("¿Listo para el siguiente paso?"), ¿te sirve como ancla de presencia, o después del tercer clic corres el riesgo de sentirlo como un trámite burocrático y cerrar la pestaña?
+
+¿Necesitas que la app gestione tiempos ciegos (temporizadores/notificaciones push agresivas mientras la lavadora corre para que no te olvides de que existe), o tu problema es únicamente la activación al inicio y el doblado al final?
+
+3. Sobre la arquitectura del hábito (Tody vs. Patric)
+
+Tody funciona por indicadores de necesidad acumulada (barras que se llenan con los días) y Patric funciona como un ritual inmersivo de ejecución. ¿Cuál es el disparador que te cuesta más: identificar cuándo toca lavar o ejecutar el proceso sin abrumarte una vez que ya decidiste lavar?
+
+Si una noche estás en energía 2 y la regla te dice "solo remojo nocturno", ¿tienes la flexibilidad mental de acatar la regla de la app, o te genera frustración dejar la tarea a medias?
+
+4. Sobre la tentación del desarrollo (Meta-trampa del TDAH)
+
+¿Programar la app no se estará convirtiendo en una forma sofisticada de procrastinar la tarea física de ordenar el clóset y lavar la ropa hoy?
+
+¿Cuál es la versión mínima absoluta (el MVP) que te daría utilidad real este mismo fin de semana sin meterte en arquitecturas complejas de bases de datos o sincronización?
+
+Al responder a estas preguntas, ¿dónde identificas tu verdadero cuello de botella?
+
+Necesito claridad y orden tengo como 10 tandas de lavar, además que no puedo sostener el hábito de lavar, quiero tener un acompañante o Buddy de cmaccountabilty y para eso es la app, lo que me pasa al lavar es que no se cuando es ideal lavar y a veces inicio muy tarde y se me olvida hacer el siguiente paso y a veces se me dificulta iniciar el proceso
+
+Aquí está el mapa exacto del problema: estás lidiando con ceguera del tiempo, parálisis por sobrecarga (10 tandas acumuladas) y ruptura de memoria de trabajo entre transiciones (olvidar la ropa en la lavadora o por tender).
+
+Para no construir una app sobrediseñada que te abrume, tu solución técnica debe resolver únicamente tres dolores:
+
+1. El embudo de rescate: Salir de las 10 tandas acumuladas
+Intentar procesar 10 tandas bajo el flujo normal garantiza parálisis. Necesitas un protocolo de emergencia para desatorar el sistema:
+
+Triage drástico: De esas 10 tandas, solo 2 son críticas de supervivencia para tu semana de trabajo y entrenamiento. El resto (cortinas, cobijas pesadas, ropa fuera de temporada) no existe hoy.
+
+Límite operativo: Máximo 1 o 2 tandas por día. Pretender hacer 10 en un fin de semana agota la dopamina y quema el hábito antes de consolidarlo.
+
+2. La arquitectura exacta que debe tener tu App / Buddy
+Olvídate de módulos de inventario, logins o bases de datos complejas. Tu PWA necesita ser una máquina de estados finitos lineal con temporizador de transición:
+
+A. Semáforo de Inicio (Decisión cero)
+
+Lee la hora local del dispositivo automáticamente:
+
+Si es antes de las 11:00 AM → Luz verde: Ritual completo Patric.
+
+Entre 1:00 PM y 4:00 PM → Amarillo: Alerta de humedad nocturna al secar. Solo tandas pequeñas de secado rápido (Tech/Deporte).
+
+Después de las 7:00 PM → Rojo/Bloqueo: Solo remojo nocturno de toallas o prendas de batalla. Se bloquea el inicio de tandas completas para proteger tu descanso.
+
+B. Temporizador de Transición Forzosa (Anti-olvido)
+
+El mayor punto de quiebre en TDAH no es encender la lavadora, es la fase ciega mientras corre el ciclo.
+
+En cuanto marcas "Inicié lavado", la app arranca una cuenta regresiva visual y dispara una alarma/notificación sonora: "Ropa lista: 2 minutos para sacudir y tender".
+
+C. Modo Una-Sola-Cosa (Accountability Buddy)
+
+La pantalla bloquea la visibilidad del resto del proceso.
+
+No te muestra que falta doblar ni que hay 9 tandas esperando. Solo muestra: "Ponte audífonos, separa Soft & Personal, 2 cucharadas de jabón. ¿Listo para el siguiente paso?".
+
+3. Protocolo para hoy (Viernes al mediodía)
+Son pasadas las 12:00 PM. Estás en la ventana límite antes de que el sol empiece a caer.
+
+No toques código todavía.
+
+Escoge solo 1 tanda de supervivencia: O la ropa de consultoría/trabajo para la semana o la ropa de entrenamiento.
+
+Pon tus audífonos, mide 2 cucharadas de detergente, mete esa única tanda y programa una alarma en tu teléfono a los 45 minutos.
+
+¿Cuál es la tanda única de supervivencia que necesitas activa hoy para no quedarte sin ropa el lunes?
+
+Y es que además eso genera ruido p carga cognitiva innesaria al grabar y necesito un espacio para mi trabajo de "oficina" y no tengo mi cama tendida, no he lavado los dientes, es decir funciones ejecutivas 100 Juan Pablo 0
+
+Freno de mano total. Apaga la idea de programar la app, apaga la lista mental de las 10 tandas y apaga la culpa. Lo que estás sintiendo no es pereza ni incompetencia: es secuestro ejecutivo por sobrecarga sensorial y visual.
+
+Cuando el espacio físico está desbordado, tu cerebro TDAH procesa cada objeto fuera de lugar como una pestaña abierta en el navegador consumiendo memoria RAM. No puedes entrar en modo trabajo ni planear nada si tu cuerpo ni siquiera ha cubierto sus anclajes biológicos básicos.
+
+Hoy no vamos a ganar el partido por goleada; hoy solo vamos a meter el primer pase bueno para recuperar el control.
+
+Vamos a aplicar la Secuencia de Fricción Cero en este orden estricto:
+
+Paso 1: Restauración biológica (3 minutos)
+Ve directo al baño y lávate los dientes. Sin pensar en nada más. Siente el agua fría en la cara y el sabor a menta. Ese es el interruptor fisiológico para reiniciar el sistema.
+
+Paso 2: Neutralizar el campo visual (2 minutos)
+Regresa a tu cama y haz un estirón rápido: jala las sábanas y pon la almohada en su lugar. No tiene que quedar de hotel; solo necesita verse una superficie plana para que tu cerebro deje de registrar caos en el fondo si tienes que encender la cámara.
+
+Paso 3: Hidratación de choque
+Toma un vaso completo de agua fresca. Tu cerebro necesita hidratación para que la dopamina circule.
+
+Olvida la ropa, olvida la oficina y olvida el código por los próximos 7 minutos.
+
+Solo ve al lavamanos. ¿Hacemos ese paso 1 ahora mismo?
+
+Es que necesito un sistema para hacer eso automático y no caer en querer aprender todos mis hábitos al mismo tiempo
+
+El error clásico del TDAH es diseñar un "sistema maestro" que pretende automatizar 8 hábitos el día 1, colapsar al día 4 por agotamiento de dopamina y volver al marcador en cero.
+
+Para que un sistema sea automático de verdad sin sobrecargar tu corteza prefrontal, tiene que regirse por tres leyes de ingeniería del comportamiento:
+
+1. La Ley del Ancla Fisiológica (Habit Stacking real)
+No intentes fijar hábitos a horas de reloj ("a las 8:00 AM haré X"), porque la ceguera temporal los destruye. Ancla una acción nueva a algo que tu cuerpo ya hace físicamente por necesidad biológica:
+
+Ancla: En cuanto tus pies tocan el suelo por la mañana → Acción automática: Estirar la colcha de la cama (10 segundos, sin perfección).
+
+Ancla: En cuanto entras al baño a orinar al despertar → Acción automática: Lavado de dientes.
+
+No hay toma de decisiones; el cuerpo ya está en el lugar físico donde ocurre el ancla.
+
+2. Una sola variable a la vez (Regla de los 14 días)
+
+Si intentas correr el hábito de cama + dientes + lavandería + trabajo + ejercicio a la vez, tu cerebro lo procesa como una amenaza masiva.
+
+Elige solo UN micro-hábito durante dos semanas. Cuando ese micro-hábito ya no requiera fuerza de voluntad para ejecutarse, tienes licencia para acoplar el siguiente eslabón.
+
+3. Reducción a "Entrada Ridículamente Pequeña" (Two-Minute Rule)
+
+La resistencia ejecutiva se activa ante la magnitud de la tarea completa ("hacer toda la lavandería", "limpiar toda la oficina").
+
+Tu sistema solo debe exigirte el gatillo de inicio, nunca el final:
+
+El hábito no es "lavar y guardar la ropa"; el hábito es solo meter 1 tanda y dar al botón.
+
+El hábito no es "ordenar el cuarto de trabajo"; es quitar 3 objetos del campo visual de la cámara.
+
+Hoy no diseñes el sistema completo ni escribas código para una app. Tu único sistema operativo por los próximos 10 minutos es ejecutar el ancla fisiológica que dejamos pendiente:
+
+Ve al baño y lávate los dientes.
+
+Jala la colcha de la cama.
+
+¿Vas al lavamanos ahora para marcar ese 1-0 a tu favor?
+
+Es que la ropa afecta a los demás y aparte es lo del trabajo y aparte es mi salud mental y apariencia y a veces esto del adulting me cuesta
+
+Es completamente válido sentirse así. Cuando el TDAH entra en juego, las tareas del hogar nunca son "solo lavar ropa" o "solo tender la cama"; se convierten en un juicio silencioso sobre tu capacidad de ser adulto, sobre cómo te perciben en el trabajo y sobre el espacio que compartes con quienes convives. Esa carga moral pesa el triple que la tarea física.
+
+La clave aquí es separar dos cosas: tu valor y capacidad como persona no están definidos por una montaña de ropa, y el "adulting" no es una virtud moral, es solo una serie de procesos logísticos que tu cerebro procesa con una química distinta.
+
+Para cortar la espiral de culpa y recuperar el control, vamos a desactivar los tres frentes que te están asfixiando:
+
+Frente 1: "Afecta a los demás" (Liberar el espacio común)
+La fricción con los demás suele ser visual y de territorio. No necesitas lavar las 10 tandas hoy para resolver esto. Solo toma una canasta o una bolsa grande y retira la ropa de las áreas comunes. Con que el espacio compartido quede despejado, la tensión con los demás baja a cero de inmediato.
+
+Frente 2: "Lo del trabajo y mi apariencia" (El kit de supervivencia)
+No necesitas un clóset perfecto hoy. Solo necesitas 3 conjuntos impecables listos para tus reuniones y consultorías de la próxima semana. Esas son las únicas prendas que tienen derecho a tocar la lavadora hoy. El resto puede esperar su turno sin culpa.
+
+Frente 3: "Mi salud mental" (Bajar el volumen del ruido visual)
+Tu entorno desordenado no es una falta de carácter; es simplemente el reflejo de que tu corteza prefrontal estuvo ocupada apagando otros fuegos de alto impacto. Trátate con la misma empatía profesional con la que asesoras o gestionas proyectos ajenos.
+
+Baja los hombros, suelta el aire y deja de exigirte resolver la vida entera en este instante.
+
+¿Cuál es la única camisa o conjunto clave de trabajo que si dejas listo hoy te quitaría un 80% de la angustia para el lunes?
