@@ -28,6 +28,9 @@ export function useReconciliation() {
           // Si estamos usando el Mock de web, evitamos crash por fechas inválidas
           if (!batch || !batch.createdAt) continue;
           
+          // FILTRO DEFENSIVO para el Mock Web (ya que el mock devuelve TODAS las tandas)
+          if (batch.status !== 'WASHING' && batch.status !== 'SOAKING') continue;
+          
           const batchTime = new Date(batch.createdAt).getTime();
 
           // 2. Comprobar si el tiempo estimado ya expiró
