@@ -17,6 +17,8 @@ export default function BatchFlowScreen() {
   const [flowStep, setFlowStep] = useState<'TIME_CHECK' | 'ANCHOR' | 'CLASSIFICATION' | 'WASHING' | 'HANGING' | 'DRYING' | 'CLOSURE' | 'DONE'>('TIME_CHECK');
   const [closureGoal, setClosureGoal] = useState<'MINI' | 'PLUS' | 'ELITE' | null>(null);
   const [categoriesList, setCategoriesList] = useState<any[]>([]);
+  const [backlogCount, setBacklogCount] = useState(0);
+  const [wipCount, setWipCount] = useState(0);
 
   useEffect(() => {
     async function loadCategories() {
@@ -46,6 +48,17 @@ export default function BatchFlowScreen() {
     }
     loadBatch();
   }, [id]);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const all = await db.select().from(batches);
+        setBacklogCount(all.filter((b: any) => b.status === 'BACKLOG').length);
+        setWipCount(all.filter((b: any) => ['SOAKING', 'WASHING', 'DRYING', 'READY_TO_FOLD'].includes(b.status)).length);
+      } catch (e) {}
+    }
+    fetchStats();
+  }, [flowStep]); // Se recalcula si avanzamos de paso
 
   const updateBatchStatus = async (newStatus: string) => {
     try {
@@ -79,7 +92,10 @@ export default function BatchFlowScreen() {
   const StepHeader = () => (
     <View style={styles.stepHeader}>
       <Text style={styles.stepHeaderText}>TANDA #{shortId}</Text>
-      <Text style={styles.stepHeaderSub}>Progreso Físico</Text>
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <Text style={styles.stepHeaderStat}>Backlog: <Text style={{ color: '#ffffff' }}>{backlogCount}</Text></Text>
+        <Text style={styles.stepHeaderStat}>WIP: <Text style={{ color: '#ffffff' }}>{wipCount}/2</Text></Text>
+      </View>
     </View>
   );
 
@@ -318,16 +334,17 @@ const styles = StyleSheet.create({
   stepHeader: {
     position: 'absolute',
     top: 40,
-    left: 24,
-    right: 24,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: '#262626',
     paddingBottom: 16,
+    paddingHorizontal: 24,
   },
   stepHeaderText: { color: '#737373', fontSize: 14, fontWeight: 'bold' },
-  stepHeaderSub: { color: '#10b981', fontSize: 14, fontWeight: 'bold' },
+  stepHeaderStat: { color: '#737373', fontSize: 14, fontWeight: 'bold' },
 
   title: { color: '#ffffff', fontSize: 32, fontWeight: 'bold', marginBottom: 12, textAlign: 'center', marginTop: 40 },
   subtitle: { color: '#a3a3a3', fontSize: 18, marginBottom: 48, textAlign: 'center' },
