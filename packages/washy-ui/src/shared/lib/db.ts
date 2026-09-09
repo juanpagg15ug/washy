@@ -18,25 +18,32 @@ if (Platform.OS === 'web' && typeof SharedArrayBuffer === 'undefined') {
   sqliteDb = {};
   dbInstance = {
     select: () => ({
-      from: () => ({
-        where: () => {
-          const allBatches = Object.values(memoryDb);
-          
-          // Hack para el Mock: Si estamos en la ruta de una tanda específica,
-          // devolvemos solo esa tanda para no mezclar los estados.
-          if (typeof window !== 'undefined' && window.location.pathname.includes('/batch/')) {
-            const parts = window.location.pathname.split('/');
-            const urlId = parts[parts.length - 1];
-            if (memoryDb[urlId]) {
-              return [memoryDb[urlId]];
+      from: () => {
+        const allBatches = Object.values(memoryDb);
+        const queryObj = {
+          where: (condition?: any) => {
+            // Hack para el Mock de rutas específicas
+            if (typeof window !== 'undefined' && window.location.pathname.includes('/batch/')) {
+              const parts = window.location.pathname.split('/');
+              const urlId = parts[parts.length - 1];
+              if (memoryDb[urlId]) {
+                return [memoryDb[urlId]];
+              }
             }
-          }
-          
-          // Si estamos en el Dashboard consultando WIP o Backlog,
-          // filtramos las terminadas para que no sigan apareciendo.
-          return allBatches.filter(b => b.status !== 'DONE' && b.status !== 'BACKLOG');
-        },
-      }),
+            
+            // Si la consulta viene del semáforo/dashboard y busca omitir BACKLOG (simulado)
+            // Aquí en un caso real se evaluaría 'condition', pero es un mock simple.
+            if (!condition) {
+              return allBatches;
+            }
+            // Para simplificar, devolvemos todo y dejamos que se filtre en memoria
+            return allBatches;
+          },
+          then: (resolve: any) => resolve(allBatches),
+          filter: (cb: any) => allBatches.filter(cb)
+        };
+        return queryObj;
+      },
     }),
     insert: () => ({
       values: (data: any) => {

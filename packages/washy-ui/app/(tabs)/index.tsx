@@ -35,7 +35,8 @@ export default function DashboardScreen() {
     try {
       // 1. Backlog
       const backlogQuery = await db.select().from(batches).where(eq(batches.status, 'BACKLOG'));
-      setBacklogCount(backlogQuery.length);
+      const backlogFiltered = backlogQuery.filter((b: any) => b.status === 'BACKLOG');
+      setBacklogCount(backlogFiltered.length);
 
       // 2. Extraemos todos los activos (Drizzle real filtra bien, el Mock web trae todo)
       const wipQuery = await db.select().from(batches).where(inArray(batches.status, ['SOAKING', 'WASHING', 'DRYING', 'READY_TO_FOLD']));
