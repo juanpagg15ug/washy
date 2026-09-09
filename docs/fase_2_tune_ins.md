@@ -1,0 +1,37 @@
+# Washy - Tune-Ins Pendientes de la Fase 2 🎛️
+
+La **Fase 2** construyó el "Cerebro" de Washy: las reglas anti-avoidance, los límites WIP, el semáforo del clima y el motor de reconciliación. Aunque la lógica base funciona y cumple su propósito, existen tres afinaciones (*tune-ins*) críticas de diseño y arquitectura que deben abordarse en iteraciones futuras para llevar el producto a nivel *premium*.
+
+---
+
+## 1. Independencia del Motor de Reconciliación (Background Tasks)
+**Estado Actual:**
+El motor `useReconciliation.ts` depende del ciclo de vida de React. Utiliza un `useEffect` para calcular si los 30/45 minutos de la lavadora ya expiraron.
+**El Problema:**
+Si el usuario cierra la aplicación o la pestaña web completamente, el motor "se duerme". La tanda queda congelada en la zona ciega hasta que el usuario vuelva a abrir la app de forma manual.
+**El Tune-In Faltante:**
+*   Migrar la lógica del temporizador a un proceso de fondo. 
+*   **Implementación ideal:** Al iniciar el lavado, programar un cron job o utilizar un Worker/Background Task nativo (o depender del servidor de Notificaciones Push) que despierte al dispositivo pasado el tiempo de la categoría seleccionada, sin depender de que la UI esté viva.
+
+## 2. Semáforo Meteorológico Real (Weather API)
+**Estado Actual:**
+El indicador de Luz Verde/Amarilla/Roja del Dashboard está basado en un cálculo matemático duro: asume que el sol se oculta exactamente a las 18:00 (6:00 PM) todos los días.
+**El Problema:**
+No toma en cuenta la latitud del usuario, los cambios de estación (horario de verano/invierno) ni el estado climático actual (lluvia, tormenta, alta humedad).
+**El Tune-In Faltante:**
+*   Integrar una API meteorológica gratuita (ej. *OpenWeatherMap API*).
+*   **Lógica a agregar:** Si el pronóstico indica lluvia en las próximas 3 horas, el semáforo debe cambiar a gris/rojo con el mensaje *"Lluvia inminente. Solo secado en interiores"*. Si es invierno, debe ajustar la hora del atardecer automáticamente basándose en las coordenadas del dispositivo.
+
+## 3. Comportamiento Agresivo vs. Pasivo (Nagging Profile)
+**Estado Actual:**
+En la base de datos (tabla `userSettings`) existe un campo `naggingProfile` (`SOFT`, `MEDIUM`, `HARD`), y en la UI se le pregunta al usuario su meta de cierre (`MINI`, `PLUS`, `ELITE`). Sin embargo, estas variables son meramente decorativas en este momento.
+**El Problema:**
+El sistema trata a todos los usuarios de la misma forma, independientemente de si están en un día de baja energía o si configuraron su perfil para ser estrictos.
+**El Tune-In Faltante:**
+*   Vincular el perfil de insistencia con la frecuencia de las Notificaciones Push.
+*   **Ejemplo Hard:** Si el perfil es `HARD`, enviar recordatorios cada 15 minutos si la ropa se queda húmeda en la lavadora (fase `HANGING` evadida).
+*   **Ejemplo Soft:** Si el perfil es `SOFT`, enviar una única notificación amistosa al terminar el lavado y no volver a molestar en todo el día, respetando la baja energía del usuario.
+
+---
+**Objetivo de este documento:** 
+Asegurar que el equipo técnico (o el próximo agente IA) entienda que la lógica matemática actual es un *placeholder* funcional, pero el diseño final de producto exige estas integraciones para ser una herramienta verdaderamente empática y proactiva.
