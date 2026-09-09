@@ -16,7 +16,20 @@ export default function BatchFlowScreen() {
   // Sub-estados efímeros de la UI (separando la acción física de colgar del secado pasivo)
   const [flowStep, setFlowStep] = useState<'TIME_CHECK' | 'ANCHOR' | 'CLASSIFICATION' | 'WASHING' | 'HANGING' | 'DRYING' | 'CLOSURE' | 'DONE'>('TIME_CHECK');
   const [closureGoal, setClosureGoal] = useState<'MINI' | 'PLUS' | 'ELITE' | null>(null);
+  const [categoriesList, setCategoriesList] = useState<any[]>([]);
 
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const { categories } = require('washy-core/src/db/schema');
+        const cats = await db.select().from(categories);
+        setCategoriesList(cats);
+      } catch (e) {
+        console.error("Error loading categories", e);
+      }
+    }
+    loadCategories();
+  }, []);
   useEffect(() => {
     async function loadBatch() {
       if (!id) return;
@@ -104,6 +117,7 @@ export default function BatchFlowScreen() {
     );
   }
 
+
   if (flowStep === 'CLASSIFICATION') {
     return (
       <View style={styles.container}>
@@ -111,18 +125,24 @@ export default function BatchFlowScreen() {
         <Text style={styles.title}>Clasificación</Text>
         <Text style={styles.subtitle}>¿Qué vas a meter a la lavadora?</Text>
         <View style={styles.buttonGroup}>
-          <PhysicalButton label="☁️ Soft (Toallas/Sábanas)" variant="secondary" onPress={() => {
-            updateBatchStatus('WASHING');
-            setFlowStep('WASHING');
-          }} />
-          <PhysicalButton label="⚡ Tech (Gym/Sintético)" variant="secondary" onPress={() => {
-            updateBatchStatus('WASHING');
-            setFlowStep('WASHING');
-          }} />
-          <PhysicalButton label="🛡️ Armor (Jeans/Pesado)" variant="secondary" onPress={() => {
-            updateBatchStatus('WASHING');
-            setFlowStep('WASHING');
-          }} />
+          {categoriesList.length > 0 ? categoriesList.map(cat => (
+            <PhysicalButton 
+              key={cat.id} 
+              label={cat.name} 
+              variant="secondary" 
+              onPress={async () => {
+                const { batchCategories } = require('washy-core/src/db/schema');
+                // Guardamos qué categoría eligió para esta tanda
+                await db.insert(batchCategories).values({
+                  batchId: id,
+                  categoryId: cat.id
+                }).onConflictDoNothing();
+                
+                updateBatchStatus('WASHING');
+                setFlowStep('WASHING');
+              }} 
+            />
+          )) : <ActivityIndicator size="large" color="#10b981" />}
         </View>
         <PhysicalButton label="Atrás" variant="secondary" onPress={() => setFlowStep('ANCHOR')} style={styles.abortBtn} />
       </View>

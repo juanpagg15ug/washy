@@ -21,20 +21,34 @@ export function useReconciliation() {
         }
 
         const now = Date.now();
-        // TODO: En el futuro, leer la duración de washRules vinculada a la tanda
-        const DEFAULT_CYCLE_MS = 30 * 60 * 1000; // 30 minutos por defecto (Express)
 
         for (const batch of activeBatches) {
-          // Si estamos usando el Mock de web, evitamos crash por fechas inválidas
           if (!batch || !batch.createdAt) continue;
-          
-          // FILTRO DEFENSIVO para el Mock Web (ya que el mock devuelve TODAS las tandas)
           if (batch.status !== 'WASHING' && batch.status !== 'SOAKING') continue;
           
           const batchTime = new Date(batch.createdAt).getTime();
 
-          // 2. Comprobar si el tiempo estimado ya expiró
-          if (now - batchTime > DEFAULT_CYCLE_MS) {
+          // 2. Obtener el tiempo dinámico desde la BD (washRules)
+          let cycleMs = 30 * 60 * 1000; // 30 mins fallback
+          try {
+            const { batchCategories, categories, washRules } = require('washy-core/src/db/schema');
+            const ruleResult = await db.select({ duration: washRules.baseDurationMins })
+              .from(batchCategories)
+              .innerJoin(categories, eq(batchCategories.categoryId, categories.id))
+              .innerJoin(washRules, eq(categories.defaultWashRuleId, washRules.id))
+              .where(eq(batchCategories.batchId, batch.id))
+              .limit(1);
+            
+            if (ruleResult.length > 0 && ruleResult[0].duration) {
+              cycleMs = ruleResult[0].duration * 60 * 1000;
+              console.log(`Regla dinámica aplicada para tanda ${batch.id}: ${ruleResult[0].duration} mins`);
+            }
+          } catch (e) {
+            console.warn('Usando fallback. No se pudo obtener la regla dinámica:', e);
+          }
+
+          // 3. Comprobar si el tiempo estimado ya expiró
+          if (now - batchTime > cycleMs) {
             console.log(`Rescatando tanda ${batch.id} de la zona ciega (tiempo expirado)...`);
             
             // 3. Rescatarlas pasando a READY_TO_FOLD
