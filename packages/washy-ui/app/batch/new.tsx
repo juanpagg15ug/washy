@@ -32,6 +32,7 @@ export default function NewBatchScreen() {
             status: 'BACKLOG', 
             priorityScore: 0,
             createdAt: new Date(),
+            metadata: { intentionType: 'IMMEDIATE' }
           });
           
           await db.insert(batchEvents).values({

@@ -1,10 +1,12 @@
+import { config } from 'dotenv';
+config({ path: '../../.env' });
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import { washRules, categories } from 'washy-core/src/db/schema';
 
 const client = createClient({
-  url: 'libsql://washytest-juanpagg15ug.aws-us-east-1.turso.io',
-  authToken: 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODg5NjQ0OTgsImlkIjoiMDFhMDg2OTAtMDkwMS03MWNlLThlZTItNDQzZTMwZjI1ZDU2Iiwia2lkIjoiOTB3bEZPZnZHbmljZjVYd1dfX0FNay11ODlfb0ViVVJtTkQ1eGRSekNCOCIsInJpZCI6Ijg5MDI5YjljLTA5YTEtNDEyMC1iMjFlLTI3MmI3Njc0NDY1MyJ9.k-Z75FEtoM4mCkIt0GjesAi8h5ZgfK4yHCFQPVx326XKXwCMAEwYpfMg9JcHXyLmxo-oJza_LnaM29RZP_StCw'
+  url: process.env.EXPO_PUBLIC_TURSO_URL!,
+  authToken: process.env.EXPO_PUBLIC_TURSO_AUTH_TOKEN!
 });
 const db = drizzle(client);
 
@@ -18,8 +20,8 @@ async function seed() {
 
   console.log('Seeding categories into washytest...');
   await db.insert(categories).values([
-    { id: 'cat-tech', name: '? Tech (Gym/Sintético)', colorHex: '#00D1B2', defaultWashRuleId: 'rule-express' },
-    { id: 'cat-soft', name: '?? Soft (Toallas/Sábanas)', colorHex: '#B8E986', defaultWashRuleId: 'rule-delicate' },
+    { id: 'cat-tech', name: '? Tech (Gym/Sintï¿½tico)', colorHex: '#00D1B2', defaultWashRuleId: 'rule-express' },
+    { id: 'cat-soft', name: '?? Soft (Toallas/Sï¿½banas)', colorHex: '#B8E986', defaultWashRuleId: 'rule-delicate' },
     { id: 'cat-armor', name: '??? Armor (Jeans/Pesado)', colorHex: '#4A90E2', defaultWashRuleId: 'rule-heavy' }
   ]).onConflictDoNothing();
 

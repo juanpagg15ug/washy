@@ -11,13 +11,13 @@ Este documento rastrea los atajos temporales (`TODOs`) y configuraciones "hardco
 - **Solución:** Reemplazar este valor realizando un `LEFT JOIN` a través de `batchCategories` para obtener el ID de la categoría, y luego otro cruce con `washRules` para extraer dinámicamente la columna `baseDurationMins` específica a esa tanda (ej. 45 minutos si es *Heavy*).
 
 ## 3. Notificaciones Push (Alertas Reales)
-- **Estado Actual:** El sistema de auto-rescate y los recordatorios de estado solo ejecutan un `console.log()` simulando la campana de alerta.
-- **Solución:** Instalar y configurar `expo-notifications`. Pedir permisos al sistema operativo en el arranque y disparar notificaciones locales reales (que hagan vibrar o sonar el teléfono) cuando cambie el estado de la máquina o el Motor de Reconciliación detecte una fuga.
+- **Estado Actual:** ~~El sistema de auto-rescate... solo ejecuta un console.log().~~ (Resuelto)
+- **Solución:** ~~Instalar y configurar expo-notifications...~~ Resuelto integrando `expo-notifications` en el hook `useReconciliation.ts` para solicitar permisos y disparar notificaciones locales que alertan al usuario cuando expira el ciclo de lavado.
 
 ## 4. Dependencias del Monorepo (Hoisting)
 - **Estado Actual:** El paquete `washy-core` depende de `drizzle-orm` en sus esquemas (`schema.ts`), pero la dependencia no está declarada en `packages/washy-core/package.json`. Actualmente funciona por casualidad porque `washy-ui` lo instala y el gestor `pnpm` lo eleva (hoisting) a la raíz.
 - **Solución:** Correr `pnpm add drizzle-orm` directamente dentro del directorio de `washy-core` para que sea un paquete verdaderamente autónomo.
 
 ## 5. UI de Flujos Incompletos
-- **Estado Actual:** El paso del "Semáforo" asume clima/hora hardcodeada en `index.tsx` (restando horas desde las 18:00).
-- **Solución:** Integrar una API de clima ligera o permitir que el usuario parametrice su propio umbral de horas de sol según su país/zona horaria desde los `userSettings`.
+- **Estado Actual:** ~~El paso del "Semáforo" asume clima/hora hardcodeada en `index.tsx` (restando horas desde las 18:00).~~ (Resuelto)
+- **Solución:** ~~Integrar una API de clima ligera...~~ Resuelto integrando `Open-Meteo` y `geojs.io` en `index.tsx` para obtener dinámicamente la hora del atardecer según la ubicación (IP) del usuario.

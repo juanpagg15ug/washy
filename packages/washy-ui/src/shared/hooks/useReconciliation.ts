@@ -3,6 +3,15 @@ import { db } from '../lib/db';
 import { batches, batchEvents } from 'washy-core/src/db/schema';
 import { eq, inArray } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export function useReconciliation() {
   useEffect(() => {
@@ -10,7 +19,15 @@ export function useReconciliation() {
       try {
         console.log('Ejecutando motor de reconciliación...');
         
-        // 1. Buscar tandas en WASHING o SOAKING
+        // 1. Pedir permisos para notificaciones locales
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        
+        // 2. Buscar tandas en WASHING o SOAKING
         const activeBatches = await db.select().from(batches).where(
           inArray(batches.status, ['WASHING', 'SOAKING'])
         );
@@ -28,7 +45,7 @@ export function useReconciliation() {
           
           const batchTime = new Date(batch.createdAt).getTime();
 
-          // 2. Obtener el tiempo dinámico desde la BD (washRules)
+          // 3. Obtener el tiempo dinámico desde la BD (washRules)
           let cycleMs = 30 * 60 * 1000; // 30 mins fallback
           try {
             const { batchCategories, categories, washRules } = require('washy-core/src/db/schema');
@@ -47,16 +64,16 @@ export function useReconciliation() {
             console.warn('Usando fallback. No se pudo obtener la regla dinámica:', e);
           }
 
-          // 3. Comprobar si el tiempo estimado ya expiró
+          // 4. Comprobar si el tiempo estimado ya expiró
           if (now - batchTime > cycleMs) {
             console.log(`Rescatando tanda ${batch.id} de la zona ciega (tiempo expirado)...`);
             
-            // 3. Rescatarlas pasando a READY_TO_FOLD
+            // 5. Rescatarlas pasando a READY_TO_FOLD
             await db.update(batches)
               .set({ status: 'READY_TO_FOLD' })
               .where(eq(batches.id, batch.id));
               
-            // 4. Loggear el evento para trazabilidad inmutable
+            // 6. Loggear el evento para trazabilidad inmutable
             await db.insert(batchEvents).values({
               id: uuidv4(),
               batchId: batch.id,
@@ -68,8 +85,19 @@ export function useReconciliation() {
               metadata: { note: 'Recuperado por el Reconciliation Engine' }
             });
             
-            // TODO: Integrar expo-notifications para alertar visualmente al usuario
-            console.log(`🔔 Tanda lista: ¡Tu ropa está lista para tender! (${batch.id})`);
+            // 7. Disparar notificación push real (solo si tenemos permisos)
+            if (finalStatus === 'granted') {
+              await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "¡Lavadora Terminada! 🌀",
+                  body: "Tu ropa está lista para tender. ¡Rescátala ahora!",
+                  sound: true,
+                  data: { batchId: batch.id },
+                },
+                trigger: null, // trigger inmediato
+              });
+            }
+            console.log(`🔔 Notificación enviada: ¡Tu ropa está lista para tender! (${batch.id})`);
           }
         }
       } catch (error) {
