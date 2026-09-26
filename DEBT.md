@@ -1,23 +1,46 @@
 # Registro de Deuda Técnica (Washy)
 
-Este documento rastrea los atajos temporales (`TODOs`) y configuraciones "hardcodeadas" que deben resolverse para llevar el sistema a producción.
+Este documento rastrea las configuraciones, parches y decisiones arquitectónicas de Washy.
 
-## 1. Persistencia y Sincronización (Prioridad Crítica)
-- **Estado Actual:** En dispositivos nativos (iOS/Android), `expo-sqlite` guarda en disco. Sin embargo, en la Web (sin *Cross-Origin Isolation*), el archivo `db.ts` tiene un *fallback* a un objeto en memoria RAM (`memoryDb`). Esto causa que **al refrescar la página, todo el progreso se borre**.
-- **Solución (Fase 3):** Sustituir el mock de memoria integrando **Turso (libSQL)** u otro driver remoto (ej. Supabase) en `src/shared/lib/db.ts` para que exista una capa de persistencia real en la nube que sobreviva a la recarga de pestañas y permita sincronizar múltiples dispositivos.
+---
 
-## 2. Motor de Reconciliación (Tiempos Hardcodeados)
-- **Estado Actual:** En `useReconciliation.ts`, el tiempo límite para rescatar una tanda está "quemado" estáticamente en código a 30 minutos (`DEFAULT_CYCLE_MS = 30 * 60 * 1000`).
-- **Solución:** Reemplazar este valor realizando un `LEFT JOIN` a través de `batchCategories` para obtener el ID de la categoría, y luego otro cruce con `washRules` para extraer dinámicamente la columna `baseDurationMins` específica a esa tanda (ej. 45 minutos si es *Heavy*).
+## 1. Persistencia y Sincronización (Fase 3 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** Se integró la base de datos distribuida en la nube **Turso (libSQL)** con `drizzle-orm` en `src/shared/lib/db.ts`, operando sobre la rama `washytest` con credenciales seguras en `.env`. Persiste todos los estados entre dispositivos y recargas de navegador.
 
-## 3. Notificaciones Push (Alertas Reales)
-- **Estado Actual:** ~~El sistema de auto-rescate... solo ejecuta un console.log().~~ (Resuelto)
-- **Solución:** ~~Instalar y configurar expo-notifications...~~ Resuelto integrando `expo-notifications` en el hook `useReconciliation.ts` para solicitar permisos y disparar notificaciones locales que alertan al usuario cuando expira el ciclo de lavado.
+---
 
-## 4. Dependencias del Monorepo (Hoisting)
-- **Estado Actual:** El paquete `washy-core` depende de `drizzle-orm` en sus esquemas (`schema.ts`), pero la dependencia no está declarada en `packages/washy-core/package.json`. Actualmente funciona por casualidad porque `washy-ui` lo instala y el gestor `pnpm` lo eleva (hoisting) a la raíz.
-- **Solución:** Correr `pnpm add drizzle-orm` directamente dentro del directorio de `washy-core` para que sea un paquete verdaderamente autónomo.
+## 2. Motor de Reconciliación con Tiempos Dinámicos (Fase 3 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** En `useReconciliation.ts`, la consulta realiza un `INNER JOIN` entre `batchCategories`, `categories` y `washRules` para extraer dinámicamente la columna `baseDurationMins` específica a cada tanda (ej. 45m para Heavy, 20m para Delicate, 30m para Express).
 
-## 5. UI de Flujos Incompletos
-- **Estado Actual:** ~~El paso del "Semáforo" asume clima/hora hardcodeada en `index.tsx` (restando horas desde las 18:00).~~ (Resuelto)
-- **Solución:** ~~Integrar una API de clima ligera...~~ Resuelto integrando `Open-Meteo` y `geojs.io` en `index.tsx` para obtener dinámicamente la hora del atardecer según la ubicación (IP) del usuario.
+---
+
+## 3. Notificaciones Locales Nativas (Fase 3 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** Integrado `expo-notifications` en `useReconciliation.ts` y `batch/[id].tsx` para solicitar permisos y programar alertas nativas cuando expira el ciclo de lavado.
+
+---
+
+## 4. Declaración de Dependencias del Monorepo (Fase 3 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** La dependencia `drizzle-orm` se declaró e instaló explícitamente en [`packages/washy-core/package.json`](file:///c:/JP_Workplace/03_CORE3_Tech/DEV_proyects/Washy/packages/washy-core/package.json).
+
+---
+
+## 5. Módulo del Semáforo en Washy Core (Fase 4 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** Se extrajo la función `checkSemaphore` fuera de los componentes React y se integró en [`packages/washy-core/src/rules/semaphore.ts`](file:///c:/JP_Workplace/03_CORE3_Tech/DEV_proyects/Washy/packages/washy-core/src/rules/semaphore.ts), agregando cálculo de hora exacta de reloj y 3 pruebas unitarias en Vitest.
+
+---
+
+## 6. Nagging Engine Puro en Washy Core (Fase 4 - Resuelto)
+- **Estado:** ✅ **RESUELTO.**
+- **Solución Aplicada:** Creado el motor [`packages/washy-core/src/rules/nagging.ts`](file:///c:/JP_Workplace/03_CORE3_Tech/DEV_proyects/Washy/packages/washy-core/src/rules/nagging.ts) para calcular la frecuencia y severidad de notificaciones según el perfil del usuario (`SOFT`, `MEDIUM`, `HARD`), validado con 3 pruebas unitarias en Vitest.
+
+---
+
+## 7. Próximos Desafíos Técnicos (Roadmap Futuro)
+1. **Background Tasks nativos en móvil:** Programar Workers nativos con `expo-task-manager` para la ejecucion pasiva cuando la app está suspendida en Android/iOS.
+2. **Offline-First Fallback:** Almacenamiento local secundario en `IndexedDB` para sesiones sin conexión a internet.
+3. **Autenticación Multi-usuario:** Integración con Clerk / Supabase Auth para multitenancy de roomies/parejas.
