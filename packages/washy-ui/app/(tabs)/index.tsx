@@ -8,31 +8,13 @@ import { useRouter } from 'expo-router';
 import { PhysicalButton } from '../../src/shared/ui/PhysicalButton';
 
 import { fetchDryingEstimate } from '../../src/shared/lib/weather';
-
-function checkSemaphore(sunsetHour: number = 18, dryingHours: number = 4) {
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinutes = now.getMinutes();
-  
-  const finishDate = new Date(now.getTime() + dryingHours * 60 * 60 * 1000);
-  const finishTimeString = finishDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const remaining = sunsetHour - (currentHour + currentMinutes / 60);
-
-  if (remaining >= dryingHours) {
-    return { color: 'GREEN', message: `☀️ Clima Óptimo. Si lavas AHORA, tu ropa estará seca a las ${finishTimeString} (a tiempo antes del atardecer ~${sunsetHour}:00).` };
-  }
-  if (remaining >= (dryingHours / 2) && remaining > 0) {
-    return { color: 'YELLOW', message: `⚠️ Queda poco sol. Si lavas AHORA, terminarías a las ${finishTimeString} (cerca del atardecer ~${sunsetHour}:00).` };
-  }
-  return { color: 'RED', message: `🌙 Muy tarde para secar afuera. Terminarías a las ${finishTimeString} (después del sol). Solo secado interior o remojo nocturno.` };
-}
+import { checkSemaphore } from 'washy-core/src/rules/semaphore';
 
 export default function DashboardScreen() {
   const router = useRouter();
   const [sunsetHour, setSunsetHour] = useState(18);
   const [dryingHours, setDryingHours] = useState(4);
-  const [semaphore, setSemaphore] = useState(checkSemaphore(18, 4));
+  const [semaphore, setSemaphore] = useState(checkSemaphore(new Date(), 18, 4));
   const [backlogCount, setBacklogCount] = useState(0);
   const [wipCount, setWipCount] = useState(0);
   const [activeBatches, setActiveBatches] = useState<any[]>([]);
@@ -65,14 +47,14 @@ export default function DashboardScreen() {
       const { dryingHours: dh, sunsetHour: sh } = await fetchDryingEstimate();
       setSunsetHour(sh);
       setDryingHours(dh);
-      setSemaphore(checkSemaphore(sh, dh));
+      setSemaphore(checkSemaphore(new Date(), sh, dh));
     }
     loadWeather();
   }, []);
 
   // Poll semaphore every minute (usando el sunset actual)
   useEffect(() => {
-    const timer = setInterval(() => setSemaphore(checkSemaphore(sunsetHour, dryingHours)), 60000);
+    const timer = setInterval(() => setSemaphore(checkSemaphore(new Date(), sunsetHour, dryingHours)), 60000);
     return () => clearInterval(timer);
   }, [sunsetHour, dryingHours]);
 

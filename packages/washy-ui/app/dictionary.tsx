@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ChevronLeft, Search, ShieldAlert, Droplets, Wind } from 'lucide-react';
+import { ChevronLeft, Search, ShieldAlert, Droplets, Wind, Play } from 'lucide-react';
 import { PhysicalButton } from '../src/shared/ui/PhysicalButton';
+import { db } from '../src/shared/lib/db';
+import { batches, batchEvents } from 'washy-core/src/db/schema';
 
 export default function DictionaryScreen() {
   const router = useRouter();
@@ -42,6 +44,31 @@ export default function DictionaryScreen() {
       setResults([]);
     }
   }, [searchQuery]);
+
+  const handleStartBatch = async (categoryName: string) => {
+    try {
+      const newBatchId = crypto.randomUUID();
+      await db.insert(batches).values({
+        id: newBatchId,
+        status: 'BACKLOG',
+        priorityScore: 50,
+        createdAt: new Date(),
+        metadata: { source: 'DICTIONARY', garmentCategory: categoryName }
+      });
+      
+      await db.insert(batchEvents).values({
+        id: crypto.randomUUID(),
+        batchId: newBatchId,
+        eventType: 'STATE_CHANGE',
+        toStatus: 'BACKLOG',
+        createdAt: new Date(),
+      });
+
+      router.push(`/batch/${newBatchId}`);
+    } catch (err) {
+      console.error('Error iniciando tanda desde diccionario:', err);
+    }
+  };
 
   const showSafeDefault = searchQuery.trim().length > 0 && results.length === 0;
 
@@ -97,6 +124,14 @@ export default function DictionaryScreen() {
                 <Wind size={12} color="#fff" style={{marginRight: 4}} />
                 <Text style={styles.tagText}>{item.cycle}</Text>
               </View>
+            </View>
+
+            <View style={{ marginTop: 14 }}>
+              <PhysicalButton
+                label={`🚀 Iniciar Tanda con ${item.category}`}
+                variant="primary"
+                onPress={() => handleStartBatch(item.category)}
+              />
             </View>
           </View>
         ))}
