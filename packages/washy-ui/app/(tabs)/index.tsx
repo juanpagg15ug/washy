@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createElement } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Modal, TouchableOpacity, Platform } from 'react-native';
-import { Sun, Moon, AlertTriangle, Plus, Calendar as CalendarIcon, X, Search } from 'lucide-react';
+import { Sun, Moon, AlertTriangle, Plus, Calendar as CalendarIcon, X, Search, BookOpen, Settings } from 'lucide-react';
 import { db } from '../../src/shared/lib/db';
 import { batches, batchEvents } from 'washy-core/src/db/schema';
 import { inArray, eq } from 'drizzle-orm';
@@ -146,7 +146,15 @@ export default function DashboardScreen() {
     <View style={styles.container}>
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.title}>Washy</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Text style={styles.title}>Washy</Text>
+          <TouchableOpacity onPress={() => router.push('/dictionary')} style={{ padding: 6, backgroundColor: '#262626', borderRadius: 8 }}>
+            <BookOpen size={18} color="#a3a3a3" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/settings')} style={{ padding: 6, backgroundColor: '#262626', borderRadius: 8 }}>
+            <Settings size={18} color="#a3a3a3" />
+          </TouchableOpacity>
+        </View>
         <View style={styles.stats}>
           <Text style={styles.statText}>Backlog: <Text style={styles.statValue}>{backlogCount}</Text></Text>
           <Text style={styles.statText}>WIP: <Text style={styles.statValue}>{wipCount}/2</Text></Text>
