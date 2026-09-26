@@ -10,16 +10,22 @@ import { PhysicalButton } from '../../src/shared/ui/PhysicalButton';
 import { fetchDryingEstimate } from '../../src/shared/lib/weather';
 
 function checkSemaphore(sunsetHour: number = 18, dryingHours: number = 4) {
-  const currentHour = new Date().getHours();
-  const remaining = sunsetHour - currentHour;
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+  
+  const finishDate = new Date(now.getTime() + dryingHours * 60 * 60 * 1000);
+  const finishTimeString = finishDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const remaining = sunsetHour - (currentHour + currentMinutes / 60);
 
   if (remaining >= dryingHours) {
-    return { color: 'GREEN', message: `Óptimo. Secado toma ~${dryingHours}h y el sol se oculta a las ${sunsetHour}:00.` };
+    return { color: 'GREEN', message: `☀️ Clima Óptimo. Si lavas AHORA, tu ropa estará seca a las ${finishTimeString} (a tiempo antes del atardecer ~${sunsetHour}:00).` };
   }
   if (remaining >= (dryingHours / 2) && remaining > 0) {
-    return { color: 'YELLOW', message: `Precaución. Secado toma ~${dryingHours}h. Queda poco sol (Atardecer ~${sunsetHour}:00).` };
+    return { color: 'YELLOW', message: `⚠️ Queda poco sol. Si lavas AHORA, terminarías a las ${finishTimeString} (cerca del atardecer ~${sunsetHour}:00).` };
   }
-  return { color: 'RED', message: `Muy tarde. Necesitas ~${dryingHours}h para secar. Solo remojo nocturno.` };
+  return { color: 'RED', message: `🌙 Muy tarde para secar afuera. Terminarías a las ${finishTimeString} (después del sol). Solo secado interior o remojo nocturno.` };
 }
 
 export default function DashboardScreen() {
